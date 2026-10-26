@@ -3,24 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage Users - ICDS | Intelligent Cancer Detection System</title>
+    <title>Manage Users - ICDS</title>
 
-    <!-- Font Awesome -->
+    <!-- Fonts & Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-
-    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    
-    <link rel="stylesheet" href="../css/global.css" />
 
-    <link rel="stylesheet" href="../css/manage-users.css" />
+    <!-- Global + reuse hospital styles -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/hospital-profile.css" />
   </head>
+
   <body>
     <div class="app-container">
       <!-- SIDEBAR -->
@@ -31,448 +30,144 @@
         <!-- HEADER -->
         <div id="header-container"></div>
 
-        <div class="users-content">
-          <!-- Header -->
-          <div class="users-header">
-            <div class="header-left">
-              <h1>Hospital Staff Management</h1>
-              <p id="userStatsText">Loading users...</p>
+        <!-- PAGE CONTENT -->
+        <div class="profile-content">
+
+          <!-- PAGE HEADER -->
+          <div class="profile-header">
+            <div>
+              <h1>Manage Users</h1>
+              <p>Manage hospital staff and system users</p>
             </div>
-            <div class="header-right">
-              <button class="btn btn-outline" onclick="exportUsers()">
-                <i class="fas fa-download"></i> Export
-              </button>
-              <button class="btn btn-primary" onclick="addNewUser()">
-                <i class="fas fa-user-plus"></i> Add New User
-              </button>
-            </div>
+
+            <button id="addUserBtn" class="btn-primary">
+              <i class="fas fa-user-plus"></i> Add User
+            </button>
           </div>
 
-          <!-- Stats Cards -->
+          <!-- STATS -->
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="stat-icon primary">
+              <div class="stat-icon">
                 <i class="fas fa-users"></i>
               </div>
-              <div class="stat-details">
+              <div class="stat-info">
                 <h3 id="totalUsers">0</h3>
-                <p>Total Users</p>
+                <p>Total Staff</p>
               </div>
             </div>
 
             <div class="stat-card">
-              <div class="stat-icon success">
+              <div class="stat-icon">
                 <i class="fas fa-user-md"></i>
               </div>
-              <div class="stat-details">
+              <div class="stat-info">
                 <h3 id="totalDoctors">0</h3>
                 <p>Doctors</p>
               </div>
             </div>
 
             <div class="stat-card">
-              <div class="stat-icon info">
+              <div class="stat-icon">
                 <i class="fas fa-user-nurse"></i>
               </div>
-              <div class="stat-details">
+              <div class="stat-info">
                 <h3 id="totalNurses">0</h3>
                 <p>Nurses</p>
               </div>
             </div>
-
-            <div class="stat-card">
-              <div class="stat-icon warning">
-                <i class="fas fa-clock"></i>
-              </div>
-              <div class="stat-details">
-                <h3 id="pendingUsers">0</h3>
-                <p>Pending</p>
-              </div>
-            </div>
           </div>
 
-          <!-- Role Cards -->
-          <div class="role-cards">
-            <div class="role-card">
-              <div class="role-icon super-admin">
-                <i class="fas fa-crown"></i>
+          <!-- USERS LIST -->
+          <div class="profile-card">
+            <div class="section-header">
+              <h3><i class="fas fa-users"></i> Staff Members</h3>
+            </div>
+
+            <div id="usersList" class="items-list">
+              <div class="empty-state">
+                <i class="fas fa-user-plus"></i>
+                <p>Loading users...</p>
               </div>
-              <h4>Super Admins</h4>
-              <p>Full system access, user management, billing</p>
-              <div class="role-count" id="superAdminCount">0</div>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon admin">
-                <i class="fas fa-user-tie"></i>
-              </div>
-              <h4>Admins</h4>
-              <p>User management, reports, settings</p>
-              <div class="role-count" id="adminCount">0</div>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon doctor">
-                <i class="fas fa-user-md"></i>
-              </div>
-              <h4>Doctors</h4>
-              <p>Create assessments, view patient history</p>
-              <div class="role-count" id="doctorCount">0</div>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon nurse">
-                <i class="fas fa-user-nurse"></i>
-              </div>
-              <h4>Nurses</h4>
-              <p>Enter symptoms, view basic info</p>
-              <div class="role-count" id="nurseCount">0</div>
-            </div>
-          </div>
-
-          <!-- Search and Filter Bar -->
-          <div class="search-filter-bar">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input
-                type="text"
-                id="searchInput"
-                placeholder="Search by name, email, or role..."
-                onkeyup="searchUsers()"
-              />
-            </div>
-
-            <div class="filter-group">
-              <select id="roleFilter" onchange="filterUsers()">
-                <option value="all">All Roles</option>
-                <option value="super-admin">Super Admin</option>
-                <option value="admin">Admin</option>
-                <option value="doctor">Doctor</option>
-                <option value="nurse">Nurse</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <select id="statusFilter" onchange="filterUsers()">
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="pending">Pending</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <select id="departmentFilter" onchange="filterUsers()">
-                <option value="all">All Departments</option>
-                <option value="oncology">Oncology</option>
-                <option value="radiology">Radiology</option>
-                <option value="surgery">Surgery</option>
-                <option value="administration">Administration</option>
-                <option value="nursing">Nursing</option>
-              </select>
-            </div>
-
-            <button class="btn btn-outline" onclick="resetFilters()">
-              <i class="fas fa-undo"></i> Reset
-            </button>
-          </div>
-
-          <!-- Users Table -->
-          <div class="users-table-card">
-            <div class="table-header">
-              <h3><i class="fas fa-list"></i> Hospital Staff Directory</h3>
-              <div class="table-actions">
-                <button class="btn btn-outline" onclick="refreshTable()">
-                  <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-                <button class="btn btn-outline" onclick="sendInvitations()">
-                  <i class="fas fa-envelope"></i> Invite
-                </button>
-              </div>
-            </div>
-
-            <div class="table-container">
-              <table id="usersTable">
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Role</th>
-                    <th>Department</th>
-                    <th>Contact</th>
-                    <th>Status</th>
-                    <th>Last Active</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tableBody">
-                  <tr>
-                    <td colspan="7" class="empty-table">
-                      <div
-                        class="loading-spinner"
-                        style="margin: 0 auto 20px"
-                      ></div>
-                      <p>Loading users from database...</p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Add/Edit User Modal -->
-    <div class="modal" id="userModal">
+    <!-- ========================= -->
+    <!-- ADD USER MODAL -->
+    <!-- ========================= -->
+    <div id="addUserModal" class="modal" style="display: none">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 id="modalTitle">Add New User</h3>
-          <span class="close-modal" onclick="closeUserModal()">&times;</span>
+          <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+          <span class="close-modal">&times;</span>
         </div>
 
-        <form id="userForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                placeholder="Enter first name"
-              />
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" id="lastName" placeholder="Enter last name" />
-            </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="userName" placeholder="Enter full name" />
           </div>
 
           <div class="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              id="userEmail"
-              placeholder="name@hospital.org"
-            />
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Phone Number</label>
-              <input type="tel" id="userPhone" placeholder="+254 XXX XXXXXX" />
-            </div>
-            <div class="form-group">
-              <label>Role</label>
-              <select id="userRole">
-                <option value="doctor">Doctor</option>
-                <option value="nurse">Nurse</option>
-                <option value="admin">Admin</option>
-                <option value="super-admin">Super Admin</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Department</label>
-              <select id="userDepartment">
-                <option value="oncology">Oncology</option>
-                <option value="radiology">Radiology</option>
-                <option value="surgery">Surgery</option>
-                <option value="administration">Administration</option>
-                <option value="nursing">Nursing</option>
-                <option value="it">IT Department</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>License Number</label>
-              <input
-                type="text"
-                id="licenseNumber"
-                placeholder="Medical license number"
-              />
-            </div>
+            <label>Email *</label>
+            <input type="email" id="userEmail" placeholder="Enter email" />
           </div>
 
           <div class="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              id="userPassword"
-              placeholder="Enter password for new user"
-            />
-            <small style="color: var(--gray-500)">Minimum 8 characters</small>
+            <label>Phone</label>
+            <input type="tel" id="userPhone" placeholder="+254..." />
           </div>
 
           <div class="form-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              id="confirmUserPassword"
-              placeholder="Confirm password"
-            />
+            <label>Role *</label>
+            <select id="userRole">
+              <option value="">Select role</option>
+              <option value="doctor">Doctor</option>
+              <option value="nurse">Nurse</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
 
           <div class="form-group">
-            <label>Permissions</label>
-            <div class="permissions-grid">
-              <div class="permission-item">
-                <input type="checkbox" id="permAssess" checked />
-                <label for="permAssess">Create Assessments</label>
-              </div>
-              <div class="permission-item">
-                <input type="checkbox" id="permView" checked />
-                <label for="permView">View Patients</label>
-              </div>
-              <div class="permission-item">
-                <input type="checkbox" id="permEdit" />
-                <label for="permEdit">Edit Records</label>
-              </div>
-              <div class="permission-item">
-                <input type="checkbox" id="permDelete" />
-                <label for="permDelete">Delete Records</label>
-              </div>
-              <div class="permission-item">
-                <input type="checkbox" id="permUsers" />
-                <label for="permUsers">Manage Users</label>
-              </div>
-              <div class="permission-item">
-                <input type="checkbox" id="permReports" checked />
-                <label for="permReports">View Reports</label>
-              </div>
-            </div>
+            <label>Department</label>
+            <input type="text" id="userDepartment" placeholder="Optional" />
           </div>
-
-          <div class="form-group">
-            <label>
-              <input type="checkbox" id="sendInvite" checked />
-              Send invitation email to user
-            </label>
-          </div>
-
-          <div style="display: flex; gap: 10px; margin-top: 20px">
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="saveUser()"
-              id="saveUserBtn"
-            >
-              <i class="fas fa-save"></i> Save User
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline"
-              onclick="closeUserModal()"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Reset Password Modal -->
-    <div class="modal" id="resetPasswordModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Reset Password</h3>
-          <span class="close-modal" onclick="closeResetModal()">&times;</span>
         </div>
 
-        <p style="margin-bottom: 20px">
-          Reset password for <strong id="resetUserName">--</strong>
-        </p>
-
-        <div class="form-group">
-          <label>New Password</label>
-          <input
-            type="password"
-            id="newPassword"
-            placeholder="Enter new password"
-          />
-          <small style="color: var(--gray-500)"
-            >Minimum 8 characters with letters and numbers</small
-          >
-        </div>
-
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm new password"
-          />
-        </div>
-
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="forceReset" checked />
-            Force user to change password on next login
-          </label>
-        </div>
-
-        <div style="display: flex; gap: 10px">
-          <button
-            class="btn btn-primary"
-            onclick="confirmReset()"
-            style="flex: 1"
-          >
-            <i class="fas fa-key"></i> Reset Password
-          </button>
-          <button
-            class="btn btn-outline"
-            onclick="closeResetModal()"
-            style="flex: 1"
-          >
-            Cancel
-          </button>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="cancelUserBtn">Cancel</button>
+          <button class="btn-primary" id="saveUserBtn">Save User</button>
         </div>
       </div>
     </div>
 
-    <!-- Delete User Confirmation Modal -->
-    <div class="modal" id="deleteUserModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Delete User</h3>
-          <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
-        </div>
-
-        <p>
-          Are you sure you want to delete
-          <strong id="deleteUserName">--</strong>?
-        </p>
-        <div class="warning-text">
-          <i class="fas fa-exclamation-triangle"></i> Warning: This action
-          cannot be undone. All data associated with this user will be
-          permanently removed.
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px">
-          <button
-            class="btn btn-danger"
-            onclick="confirmDeleteUser()"
-            style="flex: 1"
-          >
-            <i class="fas fa-trash"></i> Delete User
-          </button>
-          <button
-            class="btn btn-outline"
-            onclick="closeDeleteModal()"
-            style="flex: 1"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
     <script src="../utils/env.js"></script>
+
     <script type="module" src="../js/sidebar.js"></script>
     <script type="module" src="../js/header.js"></script>
+
     <script type="module">
       import { loadLayout } from "../js/loader.js";
+      import "../js/manage-users.js";
+
       await loadLayout();
+
+      // 🔥 trigger page logic AFTER sidebar + header load
+      window.dispatchEvent(new Event("layoutLoaded"));
     </script>
-    <script type="module" src="../js/manage-users.js"></script>
+
+    <script>
+      // Logout helper
+      function handleLogout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+    </script>
   </body>
 </html>
